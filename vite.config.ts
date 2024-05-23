@@ -14,5 +14,5 @@ export default defineConfig({
       assets: '/assets'
     }
   },
-  base: '/vite-react-typescript-template' //don't forget to change this line after using template
+  base: '/quizlet'
 })
