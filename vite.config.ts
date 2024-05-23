@@ -8,10 +8,10 @@ export default defineConfig({
   plugins: [react(), svgr()],
   resolve: {
     alias: {
-      src: '/src',
-      components: '/components',
-      pages: '/pages',
-      assets: '/assets'
+      src: 'src',
+      components: '/src/components',
+      pages: '/src/pages',
+      assets: '/src/assets'
     }
   },
   base: '/quizlet'
