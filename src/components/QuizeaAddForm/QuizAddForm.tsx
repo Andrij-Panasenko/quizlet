@@ -105,7 +105,7 @@ export const QuizAddForm = () => {
                   id={`quiz-title-${quizIdx}`}
                   type="text"
                   name="quizTitle"
-                  // value={quiz.quizTitle}
+                  value={quiz.quizTitle || ''}
                   onChange={(e) => setQuizTitle(quizIdx, e.target.value)}
                   required
                   className="w-full border-gray-300 rounded-md mb-4 py-2 px-4 focus:outline-none focus:border-blue-500 bg-gray-100"
