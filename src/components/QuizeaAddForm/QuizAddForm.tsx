@@ -103,6 +103,32 @@ export const QuizAddForm = () => {
     setQuizzes(newQuestion);
   };
 
+  const setAnswer = (
+    quizIdx: number,
+    questionIdx: number,
+    answerIdx: number,
+    value: string
+  ) => {
+    const newAnswer = quizzes.map((quiz, i) =>
+      i === quizIdx
+        ? {
+            ...quiz,
+            questions: quiz.questions.map((question, j) =>
+              j === questionIdx
+                ? {
+                    ...question,
+                    answers: question.answers.map((answer, k) =>
+                      k === answerIdx ? { ...answer, text: value } : answer
+                    ),
+                  }
+                : question
+            ),
+          }
+        : quiz
+    );
+    setQuizzes(newAnswer)
+  };
+
   const submitQuizForm = (e: FormEvent) => {
     e.preventDefault();
     console.log(quizzes);
@@ -139,7 +165,7 @@ export const QuizAddForm = () => {
                       id={`question-${quizIdx}-${questionIdx}`}
                       type="text"
                       name="question"
-                      // value={question.question}
+                      value={question.question || ''}
                       onChange={(e) =>
                         setQuestion(quizIdx, questionIdx, e.target.value)
                       }
@@ -162,8 +188,8 @@ export const QuizAddForm = () => {
                         />
                         <input
                           type="text"
-                          // value={answer.text}
-                          // onChange={}
+                          value={answer.text || ""}
+                          onChange={(e) => setAnswer(quizIdx, questionIdx, answerIdx, e.target.value)}
                           required
                           className="w-full border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500 bg-gray-100 mb-2"
                         />
