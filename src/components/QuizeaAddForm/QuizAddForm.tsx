@@ -38,6 +38,7 @@ export const QuizAddForm = () => {
     setQuizzes(newQuiz);
   };
 
+  //removing answer field
   const removeAnswerField = (
     quizIndex: number,
     questionIndex: number,
@@ -63,7 +64,8 @@ export const QuizAddForm = () => {
     setQuizzes(newQuiz);
   };
 
-  const addQuestion = (quizIdx) => {
+  //add new question
+  const addQuestion = (quizIdx: number) => {
     const newQuiz = quizzes.map((quiz, i) =>
       i === quizIdx
         ? {
@@ -78,10 +80,20 @@ export const QuizAddForm = () => {
     setQuizzes(newQuiz);
   };
 
-  // const removeQuestion = () => {};
+  // remove question
+  const removeQuestion = (quizIdx: number, questionIdx: number) => {
+    const newQuiz = quizzes.map((quiz, i) =>
+      i === quizIdx
+        ? {
+            ...quiz,
+            questions: quiz.questions.filter((_, j) => j !== questionIdx),
+          }
+        : quiz
+    );
+    setQuizzes(newQuiz);
+  };
 
-  // const setCorrectAnswer = () => { }
-
+  // set quiz title
   const setQuizTitle = (quizIdx: number, value: string) => {
     const newTitle = quizzes.map((quiz, i) =>
       i === quizIdx ? { ...quiz, quizTitle: value } : quiz
@@ -172,7 +184,10 @@ export const QuizAddForm = () => {
           {quizzes.map((quiz, quizIdx) => (
             <div key={quizIdx}>
               <div>
-                <label htmlFor={`quiz-title-${quizIdx}`} className="block mb-1">
+                <label
+                  htmlFor={`quiz-title-${quizIdx}`}
+                  className="block mb-1 text-2xl"
+                >
                   Quiz Title
                 </label>
                 <input
@@ -188,9 +203,21 @@ export const QuizAddForm = () => {
               {quiz.questions.map((question, questionIdx) => (
                 <div key={questionIdx}>
                   <div>
-                    <label htmlFor={`question-${quizIdx}-${questionIdx}`}>
-                      Question
-                    </label>
+                    <div className="flex justify-between mb-2">
+                      <label
+                        htmlFor={`question-${quizIdx}-${questionIdx}`}
+                        className="text-xl"
+                      >
+                        Question
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => removeQuestion(quizIdx, questionIdx)}
+                        className="px-2.5 py-0.5 bg-red-500 rounded-full text-white hover:bg-red-600 transition"
+                      >
+                        Remove question
+                      </button>
+                    </div>
                     <input
                       id={`question-${quizIdx}-${questionIdx}`}
                       type="text"
@@ -203,8 +230,8 @@ export const QuizAddForm = () => {
                       className="w-full border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500 bg-gray-100"
                     />
                   </div>
-                  <div className="">
-                    <label className="block mb-1">Answers</label>
+                  <div>
+                    <label className="block mb-1 text-lg">Answers</label>
                     {question.answers.map((answer, answerIdx) => (
                       <div
                         key={answerIdx}
@@ -251,23 +278,18 @@ export const QuizAddForm = () => {
                       Add answer variant
                     </button>
                   </div>
-                  <div className="flex justify-between items-center mb-5">
-                    <button
-                      type="button"
-                      onClick={() => addQuestion(quizIdx)}
-                      className="px-2.5 py-0.5 bg-green-500 rounded-full text-white"
-                    >
-                      Add Question
-                    </button>
-                    <button
-                      type="button"
-                      className="px-2.5 py-0.5 bg-red-500 rounded-full text-white hover:bg-red-600 transition"
-                    >
-                      Remove question
-                    </button>
-                  </div>
+                  <div className="flex justify-between items-center mb-5"></div>
                 </div>
               ))}
+              <div className="flex justify-between items-center mb-5">
+                <button
+                  type="button"
+                  onClick={() => addQuestion(quizIdx)}
+                  className="px-2.5 py-0.5 bg-green-500 rounded-full text-white"
+                >
+                  Add Question
+                </button>
+              </div>
             </div>
           ))}
           <button
