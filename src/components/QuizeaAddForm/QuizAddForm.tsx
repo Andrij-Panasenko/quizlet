@@ -15,7 +15,7 @@ const initialQuiz: Quiz = {
 export const QuizAddForm = () => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([initialQuiz]);
 
-  //adding new answer field
+  //adding new answer field to state
   const addAnswerField = (quizIndex: number, questionIdx: number) => {
     const newQuiz = quizzes.map((quiz, i) =>
       i === quizIndex
@@ -38,7 +38,7 @@ export const QuizAddForm = () => {
     setQuizzes(newQuiz);
   };
 
-  //removing answer field
+  //removing answer field from state
   const removeAnswerField = (
     quizIndex: number,
     questionIndex: number,
@@ -64,7 +64,7 @@ export const QuizAddForm = () => {
     setQuizzes(newQuiz);
   };
 
-  //add new question
+  //add new question to state
   const addQuestion = (quizIdx: number) => {
     const newQuiz = quizzes.map((quiz, i) =>
       i === quizIdx
@@ -80,7 +80,7 @@ export const QuizAddForm = () => {
     setQuizzes(newQuiz);
   };
 
-  // remove question
+  // remove question from state
   const removeQuestion = (quizIdx: number, questionIdx: number) => {
     const newQuiz = quizzes.map((quiz, i) =>
       i === quizIdx
@@ -93,7 +93,7 @@ export const QuizAddForm = () => {
     setQuizzes(newQuiz);
   };
 
-  // set quiz title
+  // set quiz title to state
   const setQuizTitle = (quizIdx: number, value: string) => {
     const newTitle = quizzes.map((quiz, i) =>
       i === quizIdx ? { ...quiz, quizTitle: value } : quiz
@@ -101,6 +101,7 @@ export const QuizAddForm = () => {
     setQuizzes(newTitle);
   };
 
+  // set question value to state
   const setQuestion = (quizIdx: number, questionIdx: number, value: string) => {
     const newQuestion = quizzes.map((quiz, i) =>
       i === quizIdx
@@ -115,6 +116,7 @@ export const QuizAddForm = () => {
     setQuizzes(newQuestion);
   };
 
+  //set answer value to state
   const setAnswer = (
     quizIdx: number,
     questionIdx: number,
@@ -141,6 +143,7 @@ export const QuizAddForm = () => {
     setQuizzes(newAnswer);
   };
 
+  //set correct value answer to state
   const setCorrectAnswer = (
     quizIdx: number,
     questionIdx: number,
