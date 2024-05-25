@@ -193,6 +193,7 @@ export const QuizAddForm = () => {
                   id={`quiz-title-${quizIdx}`}
                   type="text"
                   name="quizTitle"
+                  placeholder="Quiz title"
                   value={quiz.quizTitle || ''}
                   onChange={(e) => setQuizTitle(quizIdx, e.target.value)}
                   required
@@ -221,6 +222,7 @@ export const QuizAddForm = () => {
                       id={`question-${quizIdx}-${questionIdx}`}
                       type="text"
                       name="question"
+                      placeholder={`Set question number ${questionIdx + 1}`}
                       value={question.question || ''}
                       onChange={(e) =>
                         setQuestion(quizIdx, questionIdx, e.target.value)
