@@ -1,3 +1,4 @@
+import {FormEvent } from 'react'
 import { useState } from 'react';
 import { Quiz } from 'types/types';
 
@@ -13,6 +14,7 @@ const initialQuiz: Quiz = {
 
 export const QuizAddForm = () => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([initialQuiz]);
+  console.log("🚀 ~ QuizAddForm ~ quizzes:", quizzes)
 
   //adding new answer field
   const addAnswerField = (quizIndex: number, questionIdx: number) => {
@@ -73,11 +75,26 @@ export const QuizAddForm = () => {
       } : quiz)
     setQuizzes(newQuiz);
   }
+  
+  const removeQuestion = () => { }
+  
+  // const setCorrectAnswer = () => { }
+
+  const setQuizTitle = (quizIdx: number, value: string) => {
+    const newTitle = quizzes.map((quiz, i) => i === quizIdx ? { ...quiz, quizTitle: value } : quiz);
+    setQuizzes(newTitle);
+  }
+
+  const submitQuizForm = (e: FormEvent) => {
+    e.preventDefault()
+    console.log(quizzes)
+  }
+
   return (
     <>
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold mb-4">Create a New Quiz</h1>
-        <form className="space-y-4" id="quiz-form">
+        <form className="" id="quiz-form" onSubmit={submitQuizForm}>
           {quizzes.map((quiz, quizIdx) => (
             <div key={quizIdx}>
               <div>
@@ -89,7 +106,7 @@ export const QuizAddForm = () => {
                   type="text"
                   name="quizTitle"
                   // value={quiz.quizTitle}
-                  // onChange={}
+                  onChange={(e) => setQuizTitle(quizIdx, e.target.value)}
                   required
                   className="w-full border-gray-300 rounded-md mb-4 py-2 px-4 focus:outline-none focus:border-blue-500 bg-gray-100"
                 />
@@ -110,7 +127,7 @@ export const QuizAddForm = () => {
                       className="w-full border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500 bg-gray-100"
                     />
                   </div>
-                  <div className="space-y-2">
+                  <div className="">
                     <label className="block mb-1">Answers</label>
                     {question.answers.map((answer, answerIdx) => (
                       <div
@@ -128,7 +145,7 @@ export const QuizAddForm = () => {
                           // value={answer.text}
                           // onChange={}
                           required
-                          className="w-full border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500 bg-gray-100"
+                          className="w-full border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500 bg-gray-100 mb-2"
                         />
                         <button
                           type="button"
@@ -144,18 +161,26 @@ export const QuizAddForm = () => {
                     <button
                       type="button"
                       onClick={() => addAnswerField(quizIdx, questionIdx)}
-                      className="px-2.5 py-0.5 bg-green-500 rounded-full text-white hover:bg-green-600 transition"
+                      className="px-2.5 py-0.5 mb-4 bg-green-500 rounded-full text-white hover:bg-green-600 transition"
                     >
                       Add answer variant
                     </button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => addQuestion(quizIdx)}
-                    className="px-2.5 py-0.5 bg-green-500 rounded-full text-white mt-2 mb-5"
-                  >
-                    Add Question
-                  </button>
+                  <div className="flex justify-between items-center mb-5">
+                    <button
+                      type="button"
+                      onClick={() => addQuestion(quizIdx)}
+                      className="px-2.5 py-0.5 bg-green-500 rounded-full text-white"
+                    >
+                      Add Question
+                    </button>
+                    <button
+                      type="button"
+                      className="px-2.5 py-0.5 bg-red-500 rounded-full text-white hover:bg-red-600 transition"
+                    >
+                      Remove question
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
