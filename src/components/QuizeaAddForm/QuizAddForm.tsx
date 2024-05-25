@@ -62,6 +62,17 @@ export const QuizAddForm = () => {
     setQuizzes(newQuiz);
   };
 
+  const addQuestion = (quizIdx) => { 
+    const newQuiz = quizzes.map((quiz, i) =>
+      i === quizIdx ? {
+        ...quiz,
+        questions: [
+          ...quiz.questions,
+          {question: '', answers: [{text: '', correct: false}]}
+        ]
+      } : quiz)
+    setQuizzes(newQuiz);
+  }
   return (
     <>
       <div className="container mx-auto px-4 py-8">
@@ -140,7 +151,7 @@ export const QuizAddForm = () => {
                   </div>
                   <button
                     type="button"
-                    // onClick={}
+                    onClick={() => addQuestion(quizIdx)}
                     className="px-2.5 py-0.5 bg-green-500 rounded-full text-white mt-2 mb-5"
                   >
                     Add Question
