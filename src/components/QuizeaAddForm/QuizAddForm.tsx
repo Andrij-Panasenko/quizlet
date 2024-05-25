@@ -247,6 +247,7 @@ export const QuizAddForm = () => {
                         />
                         <input
                           type="text"
+                          placeholder={`Answer variant ${answerIdx + 1}`}
                           value={answer.text || ''}
                           onChange={(e) =>
                             setAnswer(
