@@ -157,14 +157,10 @@ export const QuizAddForm = () => {
               j === questionIdx
                 ? {
                     ...question,
-                    answers: question.answers.map((answer, k) =>
-                      k === answerIdx
-                        ? {
-                            ...answer,
-                            correct: k === answerIdx,
-                          }
-                        : answer
-                    ),
+                    answers: question.answers.map((answer, k) => ({
+                      ...answer,
+                      correct: k === answerIdx,
+                    })),
                   }
                 : question
             ),
