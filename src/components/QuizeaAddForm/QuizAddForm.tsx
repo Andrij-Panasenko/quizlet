@@ -1,4 +1,4 @@
-import {FormEvent } from 'react'
+import { FormEvent } from 'react';
 import { useState } from 'react';
 import { Quiz } from 'types/types';
 
@@ -14,7 +14,6 @@ const initialQuiz: Quiz = {
 
 export const QuizAddForm = () => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([initialQuiz]);
-  console.log("🚀 ~ QuizAddForm ~ quizzes:", quizzes)
 
   //adding new answer field
   const addAnswerField = (quizIndex: number, questionIdx: number) => {
@@ -64,31 +63,50 @@ export const QuizAddForm = () => {
     setQuizzes(newQuiz);
   };
 
-  const addQuestion = (quizIdx) => { 
+  const addQuestion = (quizIdx) => {
     const newQuiz = quizzes.map((quiz, i) =>
-      i === quizIdx ? {
-        ...quiz,
-        questions: [
-          ...quiz.questions,
-          {question: '', answers: [{text: '', correct: false}]}
-        ]
-      } : quiz)
+      i === quizIdx
+        ? {
+            ...quiz,
+            questions: [
+              ...quiz.questions,
+              { question: '', answers: [{ text: '', correct: false }] },
+            ],
+          }
+        : quiz
+    );
     setQuizzes(newQuiz);
-  }
-  
-  const removeQuestion = () => { }
-  
+  };
+
+  // const removeQuestion = () => {};
+
   // const setCorrectAnswer = () => { }
 
   const setQuizTitle = (quizIdx: number, value: string) => {
-    const newTitle = quizzes.map((quiz, i) => i === quizIdx ? { ...quiz, quizTitle: value } : quiz);
+    const newTitle = quizzes.map((quiz, i) =>
+      i === quizIdx ? { ...quiz, quizTitle: value } : quiz
+    );
     setQuizzes(newTitle);
-  }
+  };
+
+  const setQuestion = (quizIdx: number, questionIdx: number, value: string) => {
+    const newQuestion = quizzes.map((quiz, i) =>
+      i === quizIdx
+        ? {
+            ...quiz,
+            questions: quiz.questions.map((question, j) =>
+              j === questionIdx ? { ...question, question: value } : question
+            ),
+          }
+        : quiz
+    );
+    setQuizzes(newQuestion);
+  };
 
   const submitQuizForm = (e: FormEvent) => {
-    e.preventDefault()
-    console.log(quizzes)
-  }
+    e.preventDefault();
+    console.log(quizzes);
+  };
 
   return (
     <>
@@ -122,7 +140,9 @@ export const QuizAddForm = () => {
                       type="text"
                       name="question"
                       // value={question.question}
-                      // onChange={}
+                      onChange={(e) =>
+                        setQuestion(quizIdx, questionIdx, e.target.value)
+                      }
                       required
                       className="w-full border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500 bg-gray-100"
                     />
@@ -196,4 +216,3 @@ export const QuizAddForm = () => {
     </>
   );
 };
-
