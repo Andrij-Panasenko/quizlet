@@ -126,7 +126,37 @@ export const QuizAddForm = () => {
           }
         : quiz
     );
-    setQuizzes(newAnswer)
+    setQuizzes(newAnswer);
+  };
+
+  const setCorrectAnswer = (
+    quizIdx: number,
+    questionIdx: number,
+    answerIdx: number
+  ) => {
+    const newQuizzes = quizzes.map((quiz, i) =>
+      i === quizIdx
+        ? {
+            ...quiz,
+            questions: quiz.questions.map((question, j) =>
+              j === questionIdx
+                ? {
+                    ...question,
+                    answers: question.answers.map((answer, k) =>
+                      k === answerIdx
+                        ? {
+                            ...answer,
+                            correct: k === answerIdx,
+                          }
+                        : answer
+                    ),
+                  }
+                : question
+            ),
+          }
+        : quiz
+    );
+    setQuizzes(newQuizzes);
   };
 
   const submitQuizForm = (e: FormEvent) => {
@@ -182,14 +212,23 @@ export const QuizAddForm = () => {
                       >
                         <input
                           type="radio"
-                          name={`correct-answer-${questionIdx}-${answerIdx}`}
-                          // checked={answer.correct}
-                          // onChange={}
+                          name={`correct-answer-${quizIdx}-${questionIdx}`}
+                          checked={answer.correct}
+                          onChange={() =>
+                            setCorrectAnswer(quizIdx, questionIdx, answerIdx)
+                          }
                         />
                         <input
                           type="text"
-                          value={answer.text || ""}
-                          onChange={(e) => setAnswer(quizIdx, questionIdx, answerIdx, e.target.value)}
+                          value={answer.text || ''}
+                          onChange={(e) =>
+                            setAnswer(
+                              quizIdx,
+                              questionIdx,
+                              answerIdx,
+                              e.target.value
+                            )
+                          }
                           required
                           className="w-full border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500 bg-gray-100 mb-2"
                         />
