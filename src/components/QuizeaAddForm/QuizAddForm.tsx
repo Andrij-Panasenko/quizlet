@@ -2,6 +2,7 @@ import { FormEvent } from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { Quiz } from 'types/types';
+import  {QUIZZES_KEY}  from '../../helpers/storageKey';
 
 const initialQuiz: Quiz = {
   quizTitle: '',
@@ -184,7 +185,7 @@ export const QuizAddForm = () => {
     e.preventDefault();
 
     //get current storaged quizzes
-    const currestQuizzesInStorage = window.localStorage.getItem('quizzes');
+    const currestQuizzesInStorage = window.localStorage.getItem(QUIZZES_KEY);
 
     // parsing quizzes from storsge
     const storagedQuizzes = currestQuizzesInStorage
@@ -197,7 +198,7 @@ export const QuizAddForm = () => {
     // set new quizzes in storage
     try {
       const updatetQuizzes = await imitationDbRequest(newQuizzes);
-      window.localStorage.setItem('quizzes', JSON.stringify(updatetQuizzes));
+      window.localStorage.setItem(QUIZZES_KEY, JSON.stringify(updatetQuizzes));
       setQuizzes([initialQuiz])
       toast.success('New quiz was successfuly saved');
     } catch (error) {
