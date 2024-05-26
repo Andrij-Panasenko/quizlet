@@ -4,9 +4,10 @@ import { Quiz } from 'types/types';
 
 interface Props {
   data: Quiz;
+  deleteQuiz: (quizTitle: string) => void;
 }
 
-export const QuizletItem = ({ data }: Props) => {
+export const QuizletItem = ({ data, deleteQuiz }: Props) => {
   const { quizTitle, questions } = data;
 
   const handleMoveToQuiz = (e: MouseEvent) => {
@@ -21,7 +22,16 @@ export const QuizletItem = ({ data }: Props) => {
   return (
     <>
       <li className="px-6 py-6 border-2 border-indigo-400 rounded-lg font-semibold w-[calc((100%-24px)/3)]">
-        <h2 className="uppercase mb-5">{quizTitle}</h2>
+        <div className="flex justify-between items-center mb-5">
+          <h2 className="uppercase ">{quizTitle}</h2>
+          <button
+            type="button"
+            onClick={() => deleteQuiz(quizTitle)}
+            className="block px-2 py-1 text-white rounded-lg bg-red-500 hover:bg-red-400 transition"
+          >
+            Delete
+          </button>
+        </div>
         <div className="flex justify-between items-center">
           <p>Questions {questions.length}</p>
           <Link

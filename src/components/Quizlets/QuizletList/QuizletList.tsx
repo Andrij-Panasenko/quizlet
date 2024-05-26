@@ -14,6 +14,11 @@ export const QuizletList = () => {
     setQuizes(parsedQuizzes);
   }, []);
 
+  const deleteQuiz = (quizTitle: string) => {
+    const newQuizes = quizes.filter((quiz) => quiz.quizTitle !== quizTitle);
+    setQuizes(newQuizes);
+    window.localStorage.setItem(QUIZZES_KEY, JSON.stringify(newQuizes));
+  };
 
   return (
     <>
@@ -26,7 +31,11 @@ export const QuizletList = () => {
         ) : (
           <ul className="flex flex-wrap gap-3 my-8">
             {quizes.map((quiz: Quiz) => (
-              <QuizletItem key={quiz.quizTitle} data={quiz} />
+              <QuizletItem
+                key={quiz.quizTitle}
+                data={quiz}
+                deleteQuiz={deleteQuiz}
+              />
             ))}
           </ul>
         )}
