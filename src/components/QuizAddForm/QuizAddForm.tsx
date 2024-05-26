@@ -318,7 +318,7 @@ export const QuizAddForm = () => {
                 <button
                   type="button"
                   onClick={() => addQuestion(quizIdx)}
-                  className="px-2.5 py-0.5 bg-green-500 rounded-full text-white"
+                  className="px-2.5 py-0.5 bg-green-500 rounded-full text-white hover:bg-green-600 transition"
                 >
                   Add Question
                 </button>
