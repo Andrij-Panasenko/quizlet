@@ -1,0 +1,1 @@
+export const QUIZZES_KEY = 'quizzes'
