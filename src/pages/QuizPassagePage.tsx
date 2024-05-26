@@ -18,7 +18,6 @@ const QuizPassagePage = () => {
     const currentQuiz = parsedQuizzes.filter(
       (item: Quiz) => item.quizTitle === param.quizID
     );
-    console.log('🚀 ~ QuizPassagePage ~ currentQuiz:', currentQuiz);
     setQuiz(currentQuiz);
   }, [param.quizID]);
 
