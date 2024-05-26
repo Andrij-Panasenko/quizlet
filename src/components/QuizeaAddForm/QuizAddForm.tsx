@@ -1,5 +1,6 @@
 import { FormEvent } from 'react';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { Quiz } from 'types/types';
 
 const initialQuiz: Quiz = {
@@ -170,9 +171,38 @@ export const QuizAddForm = () => {
     setQuizzes(newQuizzes);
   };
 
-  const submitQuizForm = (e: FormEvent) => {
+  // imitation request to DB using promise resolve
+  const imitationDbRequest = (data: Quiz[]) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(data);
+      }, 500);
+    });
+  };
+
+  const submitQuizForm = async (e: FormEvent) => {
     e.preventDefault();
-    console.log(quizzes);
+
+    //get current storaged quizzes
+    const currestQuizzesInStorage = window.localStorage.getItem('quizzes');
+
+    // parsing quizzes from storsge
+    const storagedQuizzes = currestQuizzesInStorage
+      ? JSON.parse(currestQuizzesInStorage)
+      : [];
+
+    // spreding prev storaged quizzes and new
+    const newQuizzes = [...storagedQuizzes, ...quizzes];
+
+    // set new quizzes in storage
+    try {
+      const updatetQuizzes = await imitationDbRequest(newQuizzes);
+      window.localStorage.setItem('quizzes', JSON.stringify(updatetQuizzes));
+      setQuizzes([initialQuiz])
+      toast.success('New quiz was successfuly saved');
+    } catch (error) {
+      console.error('Failed to set quiz. Try again later', error);
+    }
   };
 
   return (
