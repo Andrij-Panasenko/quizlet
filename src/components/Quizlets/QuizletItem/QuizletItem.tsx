@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Quiz } from "types/types";
 
 interface Props {
@@ -12,12 +13,12 @@ export const QuizletItem = ({ data }: Props) => {
         <h2 className="uppercase mb-5">{quizTitle}</h2>
         <div className="flex justify-between items-center">
           <p>Questions {questions.length}</p>
-          <button
-            type="button"
+          <Link
+            to={`/quizes/${quizTitle}`}
             className="block px-2 py-1 text-white rounded-lg bg-green-500 hover:bg-green-400 transition"
           >
             Move to quiz
-          </button>
+          </Link>
         </div>
       </li>
     </>
