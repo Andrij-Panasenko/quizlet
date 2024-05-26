@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.sentence::first-letter {
+  text-transform: uppercase;
+  /* Робить першу літеру великою */
+}
