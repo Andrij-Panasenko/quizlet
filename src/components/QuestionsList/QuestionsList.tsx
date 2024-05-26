@@ -27,7 +27,10 @@ export const QuestionsList: FC<QuestionList> = ({
             key={idx}
             className="flex items-center space-x-2 bg-slate-300 px-3 py-3 rounded-lg mb-2 hover:bg-slate-200 transition"
           >
-            <input type="radio" name="" id="" />
+            <input
+              type="radio"
+              name={`answer-variant-${question.question}-${questionIdx}`}
+            />
             <p className="sentence">{answer.text}</p>
           </li>
         ))}
