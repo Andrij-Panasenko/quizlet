@@ -1,4 +1,4 @@
-import { QuizAddForm } from 'components/QuizeaAddForm/QuizAddForm';
+import { QuizAddForm } from 'components/QuizAddForm/QuizAddForm';
 
 function MainPage() {
     return (
