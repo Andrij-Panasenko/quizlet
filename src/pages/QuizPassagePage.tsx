@@ -6,6 +6,7 @@ import { QuestionsList } from 'components/QuestionsList/QuestionsList';
 
 const QuizPassagePage = () => {
   const [quiz, setQuiz] = useState<Quiz[]>([]);
+  const [time, setTime] = useState<number>(0);
 
   const [questionIdx, setQuestionIdx] = useState<number>(0);
   const param = useParams<{ quizID: string }>();
@@ -25,6 +26,17 @@ const QuizPassagePage = () => {
     setQuestionIdx(questionIdx + 1);
   };
 
+  const formatedTime = (totalSec: number) => {
+    const seconds = totalSec % 60;
+    const minites = Math.floor((totalSec % 3600) / 60);
+    const hours = Math.floor(totalSec / 3600);
+
+    return `${String(hours).padStart(2, '0')}:${String(minites).padStart(
+      2,
+      '0'
+    )}:${String(seconds).padStart(2, '0')}`;
+  };
+
   return (
     <>
       {quiz.length && (
@@ -38,18 +50,23 @@ const QuizPassagePage = () => {
             questionIdx={questionIdx}
             totalQuestions={quiz[0].questions.length}
           />
-          {questionIdx !== quiz[0].questions.length - 1 ? (
-            <button
-              onClick={setNextQuestion}
-              className="px-2.5 py-0.5 bg-green-500 rounded-full text-white hover:bg-green-600 transition"
-            >
-              Next &gt;
-            </button>
-          ) : (
-            <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition">
-              Submit quiz
-            </button>
-          )}
+          <div className="flex justify-between">
+            {questionIdx !== quiz[0].questions.length - 1 ? (
+              <button
+                onClick={setNextQuestion}
+                className="px-2.5 py-0.5 bg-green-500 rounded-full text-white hover:bg-green-600 transition"
+              >
+                Next &gt;
+              </button>
+            ) : (
+              <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition">
+                Submit quiz
+              </button>
+            )}
+            <div>
+              <p className="text-lg font-semibold">{formatedTime(time)}</p>
+            </div>
+          </div>
         </div>
       )}
     </>
