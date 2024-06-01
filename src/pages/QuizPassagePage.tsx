@@ -1,7 +1,7 @@
 import { QUIZZES_KEY, QUIZZ_TIMER } from 'helpers/storageKey';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Quiz } from '../types/types';
+import { Answer, Quiz } from '../types/types';
 import { QuestionsList } from 'components/QuestionsList/QuestionsList';
 
 const getStoragedTime = () => {
@@ -10,6 +10,7 @@ const getStoragedTime = () => {
 };
 
 const QuizPassagePage = () => {
+  const [selectedAnswer, setSelectedAnswer] = useState({})
   const [quiz, setQuiz] = useState<Quiz[]>([]);
   const [time, setTime] = useState<number>(getStoragedTime);
   const [questionIdx, setQuestionIdx] = useState<number>(0);
@@ -58,6 +59,13 @@ const QuizPassagePage = () => {
     )}:${String(seconds).padStart(2, '0')}`;
   };
 
+  const setAnswer = (answer: Answer) => { 
+    setSelectedAnswer(prevState => ({
+      ...prevState,
+      [questionIdx]: answer.text
+    }));
+  }
+
   return (
     <>
       {quiz.length && (
@@ -67,6 +75,7 @@ const QuizPassagePage = () => {
             {quiz[0].quizTitle}
           </h1>
           <QuestionsList
+            selectAnswer={setAnswer}
             question={quiz[0].questions[questionIdx]}
             questionIdx={questionIdx}
             totalQuestions={quiz[0].questions.length}
@@ -80,7 +89,9 @@ const QuizPassagePage = () => {
                 Next &gt;
               </button>
             ) : (
-              <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition">
+              <button
+                className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition"
+              >
                 Submit quiz
               </button>
             )}

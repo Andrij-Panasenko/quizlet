@@ -1,7 +1,8 @@
 import { FC } from 'react';
-import { Question } from '../../types/types';
+import { Answer, Question } from '../../types/types';
 
 interface QuestionList {
+  selectAnswer: (answer: Answer) => void;
   question: Question;
   questionIdx: number;
   totalQuestions: number;
@@ -11,8 +12,8 @@ export const QuestionsList: FC<QuestionList> = ({
   question,
   questionIdx,
   totalQuestions,
+  selectAnswer,
 }) => {
-
   return (
     <>
       <div className="flex justify-between mb-4">
@@ -30,6 +31,7 @@ export const QuestionsList: FC<QuestionList> = ({
             <input
               type="radio"
               name={`answer-variant-${question.question}-${questionIdx}`}
+              onChange={() => selectAnswer(answer)}
             />
             <p className="sentence">{answer.text}</p>
           </li>
@@ -38,4 +40,3 @@ export const QuestionsList: FC<QuestionList> = ({
     </>
   );
 };
-
