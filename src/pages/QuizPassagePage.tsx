@@ -12,12 +12,12 @@ const getStoragedTime = () => {
 const QuizPassagePage = () => {
   const [quiz, setQuiz] = useState<Quiz[]>([]);
   const [time, setTime] = useState<number>(getStoragedTime);
-
   const [questionIdx, setQuestionIdx] = useState<number>(0);
   const param = useParams<{ quizID: string }>();
 
   const intervalRef = useRef<number | null>(null);
 
+  //get quizzes from local storage
   useEffect(() => {
     const getStoragedQuiz = window.localStorage.getItem(QUIZZES_KEY);
 
@@ -33,6 +33,7 @@ const QuizPassagePage = () => {
     setQuestionIdx(questionIdx + 1);
   };
 
+  //set timer value to local storage
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       setTime((prevTime) => {
