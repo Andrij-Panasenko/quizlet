@@ -1,15 +1,22 @@
-import { QUIZZES_KEY } from 'helpers/storageKey';
-import { useEffect, useState } from 'react';
+import { QUIZZES_KEY, QUIZZ_TIMER } from 'helpers/storageKey';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Quiz } from '../types/types';
 import { QuestionsList } from 'components/QuestionsList/QuestionsList';
 
+const getStoragedTime = () => {
+  const savedTime = localStorage.getItem(QUIZZ_TIMER);
+  return savedTime ? JSON.parse(savedTime) : 0;
+};
+
 const QuizPassagePage = () => {
   const [quiz, setQuiz] = useState<Quiz[]>([]);
-  const [time, setTime] = useState<number>(0);
+  const [time, setTime] = useState<number>(getStoragedTime);
 
   const [questionIdx, setQuestionIdx] = useState<number>(0);
   const param = useParams<{ quizID: string }>();
+
+  const intervalRef = useRef<number | null>(null);
 
   useEffect(() => {
     const getStoragedQuiz = window.localStorage.getItem(QUIZZES_KEY);
@@ -25,6 +32,23 @@ const QuizPassagePage = () => {
   const setNextQuestion = () => {
     setQuestionIdx(questionIdx + 1);
   };
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setTime((prevTime) => {
+        const newTime = prevTime + 1;
+        window.localStorage.setItem(QUIZZ_TIMER, JSON.stringify(newTime));
+        return newTime;
+      });
+    }, 1000);
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        window.localStorage.setItem(QUIZZ_TIMER, '0');
+      }
+    };
+  }, []);
 
   const formatedTime = (totalSec: number) => {
     const seconds = totalSec % 60;
