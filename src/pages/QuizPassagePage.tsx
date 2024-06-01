@@ -29,10 +29,6 @@ const QuizPassagePage = () => {
     setQuiz(currentQuiz);
   }, [param.quizID]);
 
-  const setNextQuestion = () => {
-    setQuestionIdx(questionIdx + 1);
-  };
-
   //set timer value to local storage
   useEffect(() => {
     intervalRef.current = setInterval(() => {
@@ -78,7 +74,7 @@ const QuizPassagePage = () => {
           <div className="flex justify-between">
             {questionIdx !== quiz[0].questions.length - 1 ? (
               <button
-                onClick={setNextQuestion}
+                onClick={() => setQuestionIdx(questionIdx + 1)}
                 className="px-2.5 py-0.5 bg-green-500 rounded-full text-white hover:bg-green-600 transition"
               >
                 Next &gt;
