@@ -1,8 +1,8 @@
-import { FC } from 'react';
-import { Answer, Question } from '../../types/types';
+import { ChangeEvent, FC } from 'react';
+import { Question } from '../../types/types';
 
 interface QuestionList {
-  selectAnswer: (answer: Answer) => void;
+  selectAnswers: (answer: ChangeEvent<HTMLInputElement>) => void;
   question: Question;
   questionIdx: number;
   totalQuestions: number;
@@ -12,12 +12,17 @@ export const QuestionsList: FC<QuestionList> = ({
   question,
   questionIdx,
   totalQuestions,
-  selectAnswer,
+  selectAnswers,
 }) => {
   return (
     <>
       <div className="flex justify-between mb-4">
-        <h2 className="text-lg font-semibold sentence">{question.question}</h2>
+        <h2
+          data-question-index={questionIdx}
+          className="text-lg font-semibold sentence"
+        >
+          {question.question}
+        </h2>
         <p className="text-lg font-semibold">
           {questionIdx + 1} of {totalQuestions}
         </p>
@@ -30,8 +35,9 @@ export const QuestionsList: FC<QuestionList> = ({
           >
             <input
               type="radio"
+              value={idx + 1}
               name={`answer-variant-${question.question}-${questionIdx}`}
-              onChange={() => selectAnswer(answer)}
+              onChange={(e) => selectAnswers(e)}
             />
             <p className="sentence">{answer.text}</p>
           </li>

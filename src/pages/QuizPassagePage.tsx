@@ -1,5 +1,5 @@
 import { QUIZZES_KEY, QUIZZ_TIMER } from 'helpers/storageKey';
-import { useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Answer, Quiz } from '../types/types';
 import { QuestionsList } from 'components/QuestionsList/QuestionsList';
@@ -10,7 +10,8 @@ const getStoragedTime = () => {
 };
 
 const QuizPassagePage = () => {
-  const [selectedAnswer, setSelectedAnswer] = useState({})
+  const [selectedAnswers, setSelectedAnswers] = useState({})
+  console.log("🚀 ~ QuizPassagePage ~ selectedAnswers:", selectedAnswers)
   const [quiz, setQuiz] = useState<Quiz[]>([]);
   const [time, setTime] = useState<number>(getStoragedTime);
   const [questionIdx, setQuestionIdx] = useState<number>(0);
@@ -31,22 +32,22 @@ const QuizPassagePage = () => {
   }, [param.quizID]);
 
   //set timer value to local storage
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setTime((prevTime) => {
-        const newTime = prevTime + 1;
-        window.localStorage.setItem(QUIZZ_TIMER, JSON.stringify(newTime));
-        return newTime;
-      });
-    }, 1000);
+  // useEffect(() => {
+  //   intervalRef.current = setInterval(() => {
+  //     setTime((prevTime) => {
+  //       const newTime = prevTime + 1;
+  //       window.localStorage.setItem(QUIZZ_TIMER, JSON.stringify(newTime));
+  //       return newTime;
+  //     });
+  //   }, 1000);
 
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        window.localStorage.setItem(QUIZZ_TIMER, '0');
-      }
-    };
-  }, []);
+  //   return () => {
+  //     if (intervalRef.current) {
+  //       clearInterval(intervalRef.current);
+  //       window.localStorage.setItem(QUIZZ_TIMER, '0');
+  //     }
+  //   };
+  // }, []);
 
   const formatedTime = (totalSec: number) => {
     const seconds = totalSec % 60;
@@ -59,10 +60,10 @@ const QuizPassagePage = () => {
     )}:${String(seconds).padStart(2, '0')}`;
   };
 
-  const setAnswer = (answer: Answer) => { 
-    setSelectedAnswer(prevState => ({
+  const setAnswers = (e: ChangeEvent<HTMLInputElement>) => { 
+    setSelectedAnswers((prevState) => ({
       ...prevState,
-      [questionIdx]: answer.text
+      [e.target.name]: e.target.value,
     }));
   }
 
@@ -75,7 +76,7 @@ const QuizPassagePage = () => {
             {quiz[0].quizTitle}
           </h1>
           <QuestionsList
-            selectAnswer={setAnswer}
+            selectAnswers={setAnswers}
             question={quiz[0].questions[questionIdx]}
             questionIdx={questionIdx}
             totalQuestions={quiz[0].questions.length}
@@ -83,15 +84,14 @@ const QuizPassagePage = () => {
           <div className="flex justify-between">
             {questionIdx !== quiz[0].questions.length - 1 ? (
               <button
+                // disabled
                 onClick={() => setQuestionIdx(questionIdx + 1)}
-                className="px-2.5 py-0.5 bg-green-500 rounded-full text-white hover:bg-green-600 transition"
+                className="px-2.5 py-0.5 bg-green-500 rounded-full text-white hover:bg-green-600 transition disabled:bg-slate-500"
               >
                 Next &gt;
               </button>
             ) : (
-              <button
-                className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition"
-              >
+              <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition">
                 Submit quiz
               </button>
             )}
