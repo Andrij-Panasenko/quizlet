@@ -13,3 +13,6 @@ export type Quiz = {
     questions: Question[];
 }
 
+export type UserAnswer = {
+    [key: string]: string
+}

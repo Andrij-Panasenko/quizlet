@@ -1,7 +1,7 @@
 import { QUIZZES_KEY, QUIZZ_TIMER } from 'helpers/storageKey';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Answer, Quiz } from '../types/types';
+import { Answer, Question, Quiz, UserAnswer } from '../types/types';
 import { QuestionsList } from 'components/QuestionsList/QuestionsList';
 
 const getStoragedTime = () => {
@@ -10,8 +10,7 @@ const getStoragedTime = () => {
 };
 
 const QuizPassagePage = () => {
-  const [selectedAnswers, setSelectedAnswers] = useState({})
-  console.log("🚀 ~ QuizPassagePage ~ selectedAnswers:", selectedAnswers)
+  const [selectedAnswers, setSelectedAnswers] = useState({});
   const [quiz, setQuiz] = useState<Quiz[]>([]);
   const [time, setTime] = useState<number>(getStoragedTime);
   const [questionIdx, setQuestionIdx] = useState<number>(0);
@@ -60,12 +59,30 @@ const QuizPassagePage = () => {
     )}:${String(seconds).padStart(2, '0')}`;
   };
 
-  const setAnswers = (e: ChangeEvent<HTMLInputElement>) => { 
+  const setAnswers = (e: ChangeEvent<HTMLInputElement>) => {
     setSelectedAnswers((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
-  }
+  };
+
+  const isCorrectAnswer = (quiz: Quiz[], userAnswers: UserAnswer) => {
+    if (!quiz[0]) return;
+
+    return quiz[0].questions.map((question: Question, idx: number) => {
+      const userAnswerKey = `answer-variant-${question.question}-${idx}`;
+      const userAnswer = userAnswers[userAnswerKey];
+      const correctAnswer = question.answers.find(
+        (answer) => answer.correct
+      )?.text;
+      return {
+        question: question.question,
+        isCorrect: userAnswer === correctAnswer,
+      };
+    });
+  };
+  // isCorrectAnswer(quiz, selectedAnswers);
+  console.log('answers', isCorrectAnswer(quiz, selectedAnswers));
 
   return (
     <>
