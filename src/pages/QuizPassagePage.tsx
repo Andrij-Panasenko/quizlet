@@ -21,9 +21,9 @@ const QuizPassagePage = () => {
   const [quizResults, setQuizResults] = useState<QuizResults[]>([]);
   console.log('🚀 ~ QuizPassagePage ~ quizResults:', quizResults);
   const [quiz, setQuiz] = useState<Quiz[]>([]);
-  console.log('🚀 ~ QuizPassagePage ~ quiz:', quiz);
   const [time, setTime] = useState<number>(getStoragedTime);
   const [questionIdx, setQuestionIdx] = useState<number>(0);
+
   const param = useParams<{ quizID: string }>();
 
   const intervalRef = useRef<number | null>(null);
@@ -93,8 +93,8 @@ const QuizPassagePage = () => {
   };
 
   const submitQuiz = () => {
-    // const quizResult = isCorrectAnswer(quiz, selectedAnswers);
-    // setQuizResults(quizResult);
+    const quizResult = isCorrectAnswer(quiz, selectedAnswers);
+    setQuizResults(quizResult);
     setIsSubmittedQuiz(true);
   };
 
@@ -145,13 +145,13 @@ const QuizPassagePage = () => {
             </h1>
             {quiz[0] &&
               quiz[0].questions.map((item) => (
-                <div className=" mb-7">
+                <div key={item.question} className=" mb-7">
                   <h2 className="text-lg mb-3 font-semibold sentence">
                     {item.question}
                   </h2>
                   <ul className="flex flex-col gap-2">
                     {item.answers.map((answer) => (
-                      <li className="bg-slate-300 px-3 py-3 rounded-lg mb-2">
+                      <li key={answer.text} className="bg-slate-300 px-3 py-3 rounded-lg mb-2">
                         <p>{answer.text}</p>
                         {answer.correct && <p>correct</p>}
                       </li>
