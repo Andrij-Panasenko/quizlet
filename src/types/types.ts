@@ -16,3 +16,8 @@ export type Quiz = {
 export type UserAnswer = {
     [key: string]: string
 }
+
+export type QuizResults = {
+    question: string,
+    isCorrect: boolean
+}

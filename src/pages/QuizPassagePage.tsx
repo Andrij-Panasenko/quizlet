@@ -1,7 +1,13 @@
 import { QUIZZES_KEY, QUIZZ_TIMER } from 'helpers/storageKey';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Answer, Question, Quiz, UserAnswer } from '../types/types';
+import {
+  Answer,
+  Question,
+  Quiz,
+  UserAnswer,
+  QuizResults,
+} from '../types/types';
 import { QuestionsList } from 'components/QuestionsList/QuestionsList';
 
 const getStoragedTime = () => {
@@ -10,8 +16,12 @@ const getStoragedTime = () => {
 };
 
 const QuizPassagePage = () => {
-  const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [isSubmittedQuiz, setIsSubmittedQuiz] = useState<boolean>(false);
+  const [selectedAnswers, setSelectedAnswers] = useState<UserAnswer>({});
+  const [quizResults, setQuizResults] = useState<QuizResults[]>([]);
+  console.log('🚀 ~ QuizPassagePage ~ quizResults:', quizResults);
   const [quiz, setQuiz] = useState<Quiz[]>([]);
+  console.log('🚀 ~ QuizPassagePage ~ quiz:', quiz);
   const [time, setTime] = useState<number>(getStoragedTime);
   const [questionIdx, setQuestionIdx] = useState<number>(0);
   const param = useParams<{ quizID: string }>();
@@ -81,12 +91,16 @@ const QuizPassagePage = () => {
       };
     });
   };
-  // isCorrectAnswer(quiz, selectedAnswers);
-  console.log('answers', isCorrectAnswer(quiz, selectedAnswers));
+
+  const submitQuiz = () => {
+    // const quizResult = isCorrectAnswer(quiz, selectedAnswers);
+    // setQuizResults(quizResult);
+    setIsSubmittedQuiz(true);
+  };
 
   return (
     <>
-      {quiz.length && (
+      {quiz.length && !isSubmittedQuiz && (
         <div className="container px-4 py-8 m-auto">
           <p className="text-xl text-center mb-3">Topic of this quiz</p>
           <h1 className="sentence text-2xl font-bold mb-10 text-center">
@@ -108,7 +122,10 @@ const QuizPassagePage = () => {
                 Next &gt;
               </button>
             ) : (
-              <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition">
+              <button
+                onClick={submitQuiz}
+                className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition"
+              >
                 Submit quiz
               </button>
             )}
@@ -118,8 +135,46 @@ const QuizPassagePage = () => {
           </div>
         </div>
       )}
+
+      {isSubmittedQuiz && (
+        <>
+          <div className="container px-4 py-8 m-auto">
+            <p className="sentence my-5 text-center font-semibold text-xl">Your results</p>
+            <h1 className="sentence text-2xl font-bold mb-10 text-center">
+              {quiz[0] && quiz[0].quizTitle}
+            </h1>
+            {quiz[0] &&
+              quiz[0].questions.map((item) => (
+                <div className=" mb-7">
+                  <h2 className="text-lg mb-3 font-semibold sentence">
+                    {item.question}
+                  </h2>
+                  <ul className="flex flex-col gap-2">
+                    {item.answers.map((answer) => (
+                      <li className="bg-slate-300 px-3 py-3 rounded-lg mb-2">
+                        <p>{answer.text}</p>
+                        {answer.correct && <p>correct</p>}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+          </div>
+        </>
+      )}
     </>
   );
 };
 
 export default QuizPassagePage;
+
+{
+  /* {quizResults.map((result) => (
+            <li key={result.question}>
+              <p>Question: {result.question}</p>
+              <p>
+                isCorrect: <code>{result.isCorrect}</code>
+              </p>
+            </li>
+          ))} */
+}
