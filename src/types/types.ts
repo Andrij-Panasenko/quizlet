@@ -17,7 +17,7 @@ export type UserAnswer = {
     [key: string]: string
 }
 
-export type QuizResults = {
+export type QuizResult = {
     question: string,
     isCorrect: boolean
 }

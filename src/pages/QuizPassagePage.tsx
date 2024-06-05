@@ -1,13 +1,7 @@
 import { QUIZZES_KEY, QUIZZ_TIMER } from 'helpers/storageKey';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-  Answer,
-  Question,
-  Quiz,
-  UserAnswer,
-  QuizResults,
-} from '../types/types';
+import { Answer, Question, Quiz, UserAnswer, QuizResult } from '../types/types';
 import { QuestionsList } from 'components/QuestionsList/QuestionsList';
 
 const getStoragedTime = () => {
@@ -18,7 +12,7 @@ const getStoragedTime = () => {
 const QuizPassagePage = () => {
   const [isSubmittedQuiz, setIsSubmittedQuiz] = useState<boolean>(false);
   const [selectedAnswers, setSelectedAnswers] = useState<UserAnswer>({});
-  const [quizResults, setQuizResults] = useState<QuizResults[]>([]);
+  const [quizResults, setQuizResults] = useState<QuizResult[]>([]);
   console.log('🚀 ~ QuizPassagePage ~ quizResults:', quizResults);
   const [quiz, setQuiz] = useState<Quiz[]>([]);
   const [time, setTime] = useState<number>(getStoragedTime);
@@ -40,7 +34,7 @@ const QuizPassagePage = () => {
     setQuiz(currentQuiz);
   }, [param.quizID]);
 
-  //set timer value to local storage
+  // set timer value to local storage
   // useEffect(() => {
   //   intervalRef.current = setInterval(() => {
   //     setTime((prevTime) => {
@@ -98,6 +92,8 @@ const QuizPassagePage = () => {
     setIsSubmittedQuiz(true);
   };
 
+  const correct = quizResults.find((item) => item.isCorrect);
+
   return (
     <>
       {quiz.length && !isSubmittedQuiz && (
@@ -139,7 +135,9 @@ const QuizPassagePage = () => {
       {isSubmittedQuiz && (
         <>
           <div className="container px-4 py-8 m-auto">
-            <p className="sentence my-5 text-center font-semibold text-xl">Your results</p>
+            <p className="sentence my-5 text-center font-semibold text-xl">
+              Your results
+            </p>
             <h1 className="sentence text-2xl font-bold mb-10 text-center">
               {quiz[0] && quiz[0].quizTitle}
             </h1>
@@ -151,9 +149,16 @@ const QuizPassagePage = () => {
                   </h2>
                   <ul className="flex flex-col gap-2">
                     {item.answers.map((answer) => (
-                      <li key={answer.text} className="bg-slate-300 px-3 py-3 rounded-lg mb-2">
+                      <li
+                        key={answer.text}
+                        className={`px-3 py-3 rounded-lg mb-2 ${
+                          answer.correct === correct?.isCorrect
+                            ? 'bg-green-400'
+                            : 'bg-slate-300'
+                        }`}
+                      >
                         <p>{answer.text}</p>
-                        {answer.correct && <p>correct</p>}
+                        {answer.correct}
                       </li>
                     ))}
                   </ul>
@@ -167,14 +172,3 @@ const QuizPassagePage = () => {
 };
 
 export default QuizPassagePage;
-
-{
-  /* {quizResults.map((result) => (
-            <li key={result.question}>
-              <p>Question: {result.question}</p>
-              <p>
-                isCorrect: <code>{result.isCorrect}</code>
-              </p>
-            </li>
-          ))} */
-}
