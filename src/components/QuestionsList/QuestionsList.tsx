@@ -31,15 +31,21 @@ export const QuestionsList: FC<QuestionList> = ({
         {question.answers.map((answer, idx) => (
           <li
             key={idx}
-            className="flex items-center space-x-2 bg-slate-300 px-3 py-3 rounded-lg mb-2 hover:bg-slate-200 transition"
+            className=" bg-slate-300 rounded-lg mb-2 hover:bg-slate-200 transition"
           >
-            <input
-              type="radio"
-              value={answer.text}
-              name={`answer-variant-${question.question}-${questionIdx}`}
-              onChange={(e) => selectAnswers(e)}
-            />
-            <p className="sentence">{answer.text}</p>
+            <label
+              htmlFor={`answer-${idx}`}
+              className="flex items-center space-x-2 px-3 py-3"
+            >
+              <input
+                id={`answer-${idx}`}
+                type="radio"
+                value={answer.text}
+                name={`answer-variant-${question.question}-${questionIdx}`}
+                onChange={(e) => selectAnswers(e)}
+              />
+              <p className="sentence">{answer.text}</p>
+            </label>
           </li>
         ))}
       </ul>
