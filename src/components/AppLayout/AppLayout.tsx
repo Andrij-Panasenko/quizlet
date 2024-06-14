@@ -15,6 +15,9 @@ export const AppLayout = () => {
               <li className="font-bold uppercase hover:text-indigo-500 transition">
                 <NavLink to="/quizes">Quizes</NavLink>
               </li>
+              <li className="font-bold uppercase hover:text-indigo-500 transition">
+                <NavLink to="/passed-quizzes">Passed quizzes</NavLink>
+              </li>
             </ul>
           </nav>
         </header>
