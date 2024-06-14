@@ -1,7 +1,7 @@
-import { QUIZZES_KEY, QUIZZ_TIMER } from 'helpers/storageKey';
+import { PASSED_QUIZZES, QUIZZES_KEY, QUIZZ_TIMER } from 'helpers/storageKey';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Answer, Question, Quiz, UserAnswer, QuizResult } from '../types/types';
+import { Question, Quiz, UserAnswer, QuizResult } from '../types/types';
 import { QuestionsList } from 'components/QuestionsList/QuestionsList';
 
 const getStoragedTime = () => {
@@ -13,7 +13,6 @@ const QuizPassagePage = () => {
   const [isSubmittedQuiz, setIsSubmittedQuiz] = useState<boolean>(false);
   const [selectedAnswers, setSelectedAnswers] = useState<UserAnswer>({});
   const [quizResults, setQuizResults] = useState<QuizResult[]>([]);
-  console.log('🚀 ~ QuizPassagePage ~ quizResults:', quizResults);
   const [quiz, setQuiz] = useState<Quiz[]>([]);
   const [time, setTime] = useState<number>(getStoragedTime);
   const [questionIdx, setQuestionIdx] = useState<number>(0);
@@ -35,22 +34,22 @@ const QuizPassagePage = () => {
   }, [param.quizID]);
 
   // set timer value to local storage
-  // useEffect(() => {
-  //   intervalRef.current = setInterval(() => {
-  //     setTime((prevTime) => {
-  //       const newTime = prevTime + 1;
-  //       window.localStorage.setItem(QUIZZ_TIMER, JSON.stringify(newTime));
-  //       return newTime;
-  //     });
-  //   }, 1000);
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setTime((prevTime) => {
+        const newTime = prevTime + 1;
+        window.localStorage.setItem(QUIZZ_TIMER, JSON.stringify(newTime));
+        return newTime;
+      });
+    }, 100);
 
-  //   return () => {
-  //     if (intervalRef.current) {
-  //       clearInterval(intervalRef.current);
-  //       window.localStorage.setItem(QUIZZ_TIMER, '0');
-  //     }
-  //   };
-  // }, []);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        window.localStorage.setItem(QUIZZ_TIMER, '0');
+      }
+    };
+  }, []);
 
   const formatedTime = (totalSec: number) => {
     const seconds = totalSec % 60;
@@ -90,6 +89,18 @@ const QuizPassagePage = () => {
     const quizResult = isCorrectAnswer(quiz, selectedAnswers);
     setQuizResults(quizResult);
     setIsSubmittedQuiz(true);
+
+    const currentPassedQuizzes = JSON.parse(
+      window.localStorage.getItem(PASSED_QUIZZES) || '[]'
+    );
+
+    const passedQuiz = {
+      ...quiz,
+      time,
+    };
+    const newPassedQuizzes = [...currentPassedQuizzes, passedQuiz];
+    
+    localStorage.setItem(PASSED_QUIZZES, JSON.stringify(newPassedQuizzes));
   };
 
   const correct = quizResults.find((item) => item.isCorrect);

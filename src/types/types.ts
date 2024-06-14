@@ -11,6 +11,7 @@ export type Question = {
 export type Quiz = {
     quizTitle: string;
     questions: Question[];
+    time: number
 }
 
 export type UserAnswer = {
