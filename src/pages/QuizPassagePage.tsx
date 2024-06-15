@@ -42,7 +42,7 @@ const QuizPassagePage = () => {
         window.localStorage.setItem(QUIZZ_TIMER, JSON.stringify(newTime));
         return newTime;
       });
-    }, 100);
+    }, 1000);
 
     return () => {
       if (intervalRef.current) {
@@ -51,8 +51,6 @@ const QuizPassagePage = () => {
       }
     };
   }, []);
-
-  
 
   const setAnswers = (e: ChangeEvent<HTMLInputElement>) => {
     setSelectedAnswers((prevState) => ({
@@ -72,13 +70,19 @@ const QuizPassagePage = () => {
       )?.text;
       return {
         question: question.question,
+        selectedAnswer: userAnswer,
+        correctAnswer: correctAnswer,
         isCorrect: userAnswer === correctAnswer,
       };
     });
   };
 
-  console.log(selectedAnswers);
   const submitQuiz = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+
     const quizResult = isCorrectAnswer(quiz, selectedAnswers);
     setQuizResults(quizResult);
     setIsSubmittedQuiz(true);
@@ -87,16 +91,12 @@ const QuizPassagePage = () => {
       window.localStorage.getItem(PASSED_QUIZZES) || '[]'
     );
 
-    const passedQuiz = quiz.map(item => ({...item, time}))
-
-    console.log("🚀 ~ submitQuiz ~ passedQuiz:", ...passedQuiz)
+    const passedQuiz = quiz.map((item) => ({ ...item, time }));
 
     const newPassedQuizzes = [...currentPassedQuizzes, ...passedQuiz];
 
     localStorage.setItem(PASSED_QUIZZES, JSON.stringify(newPassedQuizzes));
   };
-
-  const correct = quizResults.find((item) => item.isCorrect);
 
   return (
     <>
@@ -152,19 +152,17 @@ const QuizPassagePage = () => {
                     {item.question}
                   </h2>
                   <ul className="flex flex-col gap-2">
-                    {item.answers.map((answer) => (
-                      <li
-                        key={answer.text}
-                        className={`px-3 py-3 rounded-lg mb-2 ${
-                          answer.correct === correct?.isCorrect
-                            ? 'bg-green-400'
-                            : 'bg-slate-300'
-                        }`}
-                      >
-                        <p>{answer.text}</p>
-                        {answer.correct}
-                      </li>
-                    ))}
+                    {item.answers.map((answer, idx) => {
+                      return (
+                        <li
+                          key={`${item.question}-${idx}`}
+                          className={`flex justify-between px-3 py-3 rounded-lg mb-2`}
+                        >
+                          <p>{answer.text}</p>
+                          <p></p>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               ))}

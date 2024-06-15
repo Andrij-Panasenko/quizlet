@@ -21,7 +21,7 @@ export const QuizletItem = ({ data, deleteQuiz }: Props) => {
   };
   return (
     <>
-      <li className="px-6 py-6 border-2 border-indigo-400 rounded-lg font-semibold w-[calc((100%-24px)/3)]">
+      <li className="px-6 py-6 border-2 border-indigo-400 rounded-lg font-semibold w-[calc((100%-24px)/2)]">
         <div className="flex justify-between items-center mb-5">
           <h2 className="uppercase ">{quizTitle}</h2>
           <button
