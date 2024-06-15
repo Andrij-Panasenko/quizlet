@@ -3,6 +3,7 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Question, Quiz, UserAnswer, QuizResult } from '../types/types';
 import { QuestionsList } from 'components/QuestionsList/QuestionsList';
+import { formatedTime } from 'helpers/formattedTime';
 
 const getStoragedTime = () => {
   const savedTime = localStorage.getItem(QUIZZ_TIMER);
@@ -51,16 +52,7 @@ const QuizPassagePage = () => {
     };
   }, []);
 
-  const formatedTime = (totalSec: number) => {
-    const seconds = totalSec % 60;
-    const minites = Math.floor((totalSec % 3600) / 60);
-    const hours = Math.floor(totalSec / 3600);
-
-    return `${String(hours).padStart(2, '0')}:${String(minites).padStart(
-      2,
-      '0'
-    )}:${String(seconds).padStart(2, '0')}`;
-  };
+  
 
   const setAnswers = (e: ChangeEvent<HTMLInputElement>) => {
     setSelectedAnswers((prevState) => ({
@@ -85,6 +77,7 @@ const QuizPassagePage = () => {
     });
   };
 
+  console.log(selectedAnswers);
   const submitQuiz = () => {
     const quizResult = isCorrectAnswer(quiz, selectedAnswers);
     setQuizResults(quizResult);
@@ -94,12 +87,12 @@ const QuizPassagePage = () => {
       window.localStorage.getItem(PASSED_QUIZZES) || '[]'
     );
 
-    const passedQuiz = {
-      ...quiz,
-      time,
-    };
-    const newPassedQuizzes = [...currentPassedQuizzes, passedQuiz];
-    
+    const passedQuiz = quiz.map(item => ({...item, time}))
+
+    console.log("🚀 ~ submitQuiz ~ passedQuiz:", ...passedQuiz)
+
+    const newPassedQuizzes = [...currentPassedQuizzes, ...passedQuiz];
+
     localStorage.setItem(PASSED_QUIZZES, JSON.stringify(newPassedQuizzes));
   };
 

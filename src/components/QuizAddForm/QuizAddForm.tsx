@@ -208,7 +208,7 @@ export const QuizAddForm = () => {
   };
 
   return (
-    <>
+    <section>
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold mb-4">Create a New Quiz</h1>
         <form className="" id="quiz-form" onSubmit={submitQuizForm}>
@@ -334,6 +334,6 @@ export const QuizAddForm = () => {
           </button>
         </form>
       </div>
-    </>
+    </section>
   );
 };
