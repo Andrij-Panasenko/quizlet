@@ -41,7 +41,7 @@ export const QuestionsList: FC<QuestionList> = ({
                 id={`answer-${idx}`}
                 type="radio"
                 value={answer.text}
-                name={`answer-variant-${question.question}-${questionIdx}`}
+                name={question.question}
                 onChange={(e) => selectAnswers(e)}
               />
               <p className="sentence">{answer.text}</p>

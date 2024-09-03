@@ -12,8 +12,13 @@ const getStoragedTime = () => {
 
 const QuizPassagePage = () => {
   const [isSubmittedQuiz, setIsSubmittedQuiz] = useState<boolean>(false);
+
   const [selectedAnswers, setSelectedAnswers] = useState<UserAnswer>({});
+  console.log('🚀selectedAnswers:', selectedAnswers);
+
   const [quizResults, setQuizResults] = useState<QuizResult[]>([]);
+  console.log('🚀quizResults:', quizResults);
+
   const [quiz, setQuiz] = useState<Quiz[]>([]);
   const [time, setTime] = useState<number>(getStoragedTime);
   const [questionIdx, setQuestionIdx] = useState<number>(0);
@@ -35,24 +40,25 @@ const QuizPassagePage = () => {
   }, [param.quizID]);
 
   // set timer value to local storage
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setTime((prevTime) => {
-        const newTime = prevTime + 1;
-        window.localStorage.setItem(QUIZZ_TIMER, JSON.stringify(newTime));
-        return newTime;
-      });
-    }, 1000);
+  // useEffect(() => {
+  //   intervalRef.current = setInterval(() => {
+  //     setTime((prevTime) => {
+  //       const newTime = prevTime + 1;
+  //       window.localStorage.setItem(QUIZZ_TIMER, JSON.stringify(newTime));
+  //       return newTime;
+  //     });
+  //   }, 1000);
 
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        window.localStorage.setItem(QUIZZ_TIMER, '0');
-      }
-    };
-  }, []);
+  //   return () => {
+  //     if (intervalRef.current) {
+  //       clearInterval(intervalRef.current);
+  //       window.localStorage.setItem(QUIZZ_TIMER, '0');
+  //     }
+  //   };
+  // }, []);
 
   const setAnswers = (e: ChangeEvent<HTMLInputElement>) => {
+    // console.log('key:', e.target.name, 'value:', e.target.value )
     setSelectedAnswers((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
@@ -62,12 +68,16 @@ const QuizPassagePage = () => {
   const isCorrectAnswer = (quiz: Quiz[], userAnswers: UserAnswer) => {
     if (!quiz[0]) return;
 
-    return quiz[0].questions.map((question: Question, idx: number) => {
-      const userAnswerKey = `answer-variant-${question.question}-${idx}`;
-      const userAnswer = userAnswers[userAnswerKey];
+    return quiz[0].questions.map((question: Question) => {
+      const userAnswerKey = question.question; // quiestion1, quiestion2 - запитання
+
+      const userAnswer = userAnswers[userAnswerKey]; // var1, var2 - варіанти відповіді що вибрав користувач
+
+      // змінна зберігає текст правильної відповіді
       const correctAnswer = question.answers.find(
         (answer) => answer.correct
       )?.text;
+
       return {
         question: question.question,
         selectedAnswer: userAnswer,
@@ -156,10 +166,12 @@ const QuizPassagePage = () => {
                       return (
                         <li
                           key={`${item.question}-${idx}`}
-                          className={`flex justify-between px-3 py-3 rounded-lg mb-2`}
+                          className={`flex justify-between px-3 py-3 rounded-lg mb-2 bg-slate-300 ${answer.correct && 'bg-green-300'} `}
                         >
                           <p>{answer.text}</p>
-                          <p></p>
+                          <p className="font-semibold">
+                            {answer.correct && <span>Correct answer</span>}
+                          </p>
                         </li>
                       );
                     })}

@@ -12,7 +12,7 @@ const initialQuiz: Quiz = {
       answers: [{ text: '', correct: false }],
     },
   ],
-  time: 0,
+  time: 234,
 };
 
 export const QuizAddForm = () => {
